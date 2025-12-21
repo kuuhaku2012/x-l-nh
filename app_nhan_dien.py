@@ -3,10 +3,9 @@ import cv2
 import numpy as np
 import tensorflow as tf
 
-# ==========================================
+
 # 1. CẤU HÌNH
-# ==========================================
-# ĐƯỜNG DẪN ẢNH INPUT (Sửa lại cho đúng máy bạn)
+# ĐƯỜNG DẪN ẢNH INPUT 
 INPUT_FOLDER = "anh_test"  
 
 MODEL_PATH = "billboard_checkpoint.keras"
@@ -14,12 +13,8 @@ IMG_SIZE = (64, 64)
 CONFIDENCE_THRESHOLD = 0.94
 DISPLAY_HEIGHT = 500 # Chiều cao cố định để hiển thị cho vừa màn hình
 
-# ==========================================
 # 2. HÀM HỖ TRỢ
-# ==========================================
 # --- TẢI MODEL ---
-# (Tắt log cảnh báo của TF cho gọn màn hình console)
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 print("Đang tải model (vui lòng chờ)...")
 try:
     model = tf.keras.models.load_model(MODEL_PATH)
@@ -42,10 +37,10 @@ def resize_height(img, target_height):
     resized_img = cv2.resize(img, (target_width, target_height))
     return resized_img
 
-# --- [CẬP NHẬT QUAN TRỌNG] HÀM TÌM VÙNG ---
+# --- HÀM TÌM VÙNG ---
 def get_region_proposals_and_edges(image_bgr):
     """
-    Trả về cả danh sách vùng đề xuất VÀ ảnh biên cạnh (edge image)
+    Trả về cả danh sách vùng đề xuất và ảnh biên cạnh (edge image)
     """
     proposals = []
     # 1. Chuyển sang ảnh xám
@@ -71,11 +66,9 @@ def get_region_proposals_and_edges(image_bgr):
     
     return proposals, edged_bgr_visualization
 
-# ==========================================
 # 3. VÒNG LẶP XỬ LÝ CHÍNH
-# ==========================================
 def run_batch_process():
-    valid_extensions = ['.jpg', '.jpeg', '.png', '.bmp']
+    valid_extensions = ['.jpg', '.jpeg', '.png']
     try:
         image_files = [f for f in os.listdir(INPUT_FOLDER) if os.path.splitext(f)[1].lower() in valid_extensions]
     except FileNotFoundError:
@@ -137,13 +130,13 @@ def run_batch_process():
         disp_final = resize_height(final_result_img, DISPLAY_HEIGHT)
 
         # Ghép ngang (Horizontal Stack)
-        combined_view = np.hstack([disp_orig, disp_edge, disp_final])
+        combined_view = cv2.hconcat([disp_orig, disp_edge, disp_final])
 
         # Hiển thị
         cv2.imshow("Visualizer: Original | Edges | CNN Result", combined_view)
         
         # Chờ phím
-        key = cv2.waitKey(0) & 0xFF
+        key = cv2.waitKey(0)
         if key == ord('q'):
             break
 
