@@ -1,7 +1,8 @@
 import os
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from tensorflow.keras import layers, models, callbacks
+import keras
+from keras import layers, models, callbacks
 
 # ==========================================
 # 1. CẤU HÌNH
@@ -23,7 +24,7 @@ print("TF Version:", tf.__version__)
 # ==========================================
 # 2. LOAD DỮ LIỆU (TRAIN - VAL - TEST)
 # ==========================================
-# 2.1 Load Train
+# 2.1 Load Train 
 train_ds = tf.keras.utils.image_dataset_from_directory(
     os.path.join(DATASET_DIR, 'train'),
     seed=123,
@@ -58,7 +59,7 @@ else:
 
 # Tối ưu hiệu năng
 AUTOTUNE = tf.data.AUTOTUNE
-train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
+train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)  
 val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 test_ds = test_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
@@ -125,7 +126,7 @@ history = model.fit(
     epochs=EPOCHS,
     callbacks=[checkpoint_cb, early_stopping_cb]
 )
-
+ 
 # ==========================================
 # 5. [MỚI] KIỂM TRA ĐỘ TIN CẬY (QUALITY GATE)
 # ==========================================
