@@ -97,7 +97,7 @@ with gr.Interface(
         gr.Gallery(label="Các biển báo đã cắt (Crops)", columns=4, height=200), # Hiển thị ảnh crop đẹp mắt
         gr.Textbox(label="Thông tin chi tiết (Log)", lines=10)
     ],
-    title="🔍 Demo Đồ Án: Nhận diện Biển Quảng Cáo",
+    title="Demo Đồ Án: Nhận diện Biển Quảng Cáo",
     description="Hệ thống Hybrid (OpenCV + CNN) tự động phát hiện, cắt và trích xuất thông tin biển quảng cáo.",
     flagging_mode="never" 
 ) as demo:
